@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Name Prompt</title>
+</head>
+<body>
+    <h1>Enter Your Name</h1>
+    <form action="/submit" method="post">
+        <label for="name">Name:</label>
+        <input type="text" id="name" name="nm" required>
+        <br>
+        <button type="submit">Submit</button>
+    </form>
+    <form action="/submit" method="get">
+        <button type="submit" name="nm" value="paka">Get User Instead</button>
+    </form>
+</body>
+</html>
