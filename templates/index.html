@@ -1,0 +1,70 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Product Review Form</title>
+  <!-- Include Bootstrap CSS link -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+
+  <style>
+    body {
+      background-color: lightblue;
+    }
+    .form-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+    }
+    .white-box {
+      background-color: white;
+      width: 30vw;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      display: flex; 
+    }
+    .pred_box {
+        border: 1px solid black;
+        padding: 10px;
+        height: 150px;
+        width: 150px;
+        margin: 10px;
+        display: flex;
+        align-items: center;
+        flex-direction: column;
+        text-align: center;
+        font-size: 80px;
+    }
+    .green_back {
+        background-color: greenyellow;
+    }
+  </style>
+</head>
+<body>
+
+    <div class="container form-container">
+        <div class="white-box">
+            <form class="form" method="post" action="/predict">
+                <div class="form-group text-center">
+                <label for="input_data">Product Review:</label>
+                <!-- <input type="text" id="input_data" name="reviewsCleaned" class="form-control" required> -->
+                <textarea id="input_data" name="reviewsCleaned" class="form-control" rows="5" required></textarea>
+                </div>
+                <div class="form-group text-center">
+                <button type="submit" class="btn btn-primary">Submit</button>
+                </div>
+            </form>
+            {% if prediction %}
+            <div class="col" style="text-align:center;">
+                <label for="input_data">Prediction Result:</label>
+                <div class="pred_box text-center">
+                    <p class="pred_value">{{ prediction[0] }}</p>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</body>
+</html>
