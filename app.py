@@ -20,24 +20,25 @@ app = Flask(__name__)
 
 # Specify the paths to the local zip files
 model_compressed = os.environ.get('MODEL_XZ_FILE')
-# model_compressed = 'compressed_amazon_fashion_overall_score_generator_model_3.xz'
 print("MODEL_XZ_FILE:", os.getenv("MODEL_XZ_FILE"))
 tfidf_file = os.environ.get('TFIDF_FILE')
-# tfidf_file = 'tfidf_vectorizer_3.pkl'
 tfidf_zip = os.environ.get('TFIDF_ZIP')
-# tfidf_zip = 'tfidf_vectorizer_3.pkl.zip'
 
 
 # Path of volume to be created
 extracted_dir = os.environ.get('VOLUME_FILES_PATH')
-# extracted_dir = '/app/model_files'
 print(f"extracted_dir: {extracted_dir}")
 
+
+# The path to the compressed model file outside the volume folder
+original_model_compressed_file = model_compressed
+original_tfidf_compressed_file = tfidf_zip
+
+# The path to the compressed model file inside the volume folder
 model_compressed_file = os.path.join(extracted_dir, model_compressed)
-# model_zip_file = os.path.join(extracted_dir, model_zip)
 vectorizer_zip_file = os.path.join(extracted_dir, tfidf_zip)
+
 print('done with file naming')
-print(f"os list: {os.listdir(extracted_dir)}");
 
 # Placeholder for the loaded model
 loaded_model = None
@@ -47,7 +48,11 @@ def create_model():
     global loaded_model
     global tfidf_vectorizer
     
-    
+    # Copy the original compressed model file to the volume folder
+    with open(original_model_compressed_file, 'rb') as src_file, \
+        open(model_compressed_file, 'wb') as dest_file:
+        dest_file.write(src_file.read())
+    print(f"os list: {os.listdir(extracted_dir)}");
     # decompress the model file
     with lzma.open(model_compressed_file, 'rb') as compressed_file:
         model_content = compressed_file.read()
@@ -68,7 +73,12 @@ def create_model():
     #----------------
 
     print(f"vectorizer_zip_file: {vectorizer_zip_file}")
-    # # Unzip the vectorizer zip file
+    # Copy the original compressed tfidf file to the volume folder
+    with open(original_tfidf_compressed_file, 'rb') as src_file, \
+        open(vectorizer_zip_file, 'wb') as dest_file:
+        dest_file.write(src_file.read())
+
+    # Unzip the vectorizer zip file
     with zipfile.ZipFile(vectorizer_zip_file, 'r') as zip_ref:
         zip_ref.extractall(extracted_dir)
 
